@@ -51,8 +51,9 @@
   #planCanvas{background:#fff;}
   #heatCanvas,#pointCanvas{position:absolute;left:0;top:0;width:100%;height:100%;}
   #pointCanvas{cursor:crosshair;}
-  #pointCanvas.mode-borne{cursor:cell;}
+  #pointCanvas.mode-borne{cursor:crosshair;}
   #pointCanvas.mode-calibrate{cursor:crosshair;}
+  #pointCanvas.mode-select{cursor:default;}
   .empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     text-align:center;color:var(--muted);max-width:420px;}
   .empty .big{font-size:42px;margin-bottom:6px;color:var(--muted-2);}
@@ -159,6 +160,7 @@
     <button class="mseg-btn active" id="modeMesure">📍 Mesure</button>
     <button class="mseg-btn" id="modeBorne">📡 Borne</button>
     <button class="mseg-btn" id="modeCalib">📏 Calibrer</button>
+    <button class="mseg-btn" id="modeSelect">☞ Sél.</button>
   </div>
   <div class="header-actions">
     <button class="btn" id="btnPlan">Charger un plan</button>
@@ -525,6 +527,7 @@
       ptX.textAlign="center";ptX.textBaseline="middle";
       state.points.forEach(function(p){
         var v=valueOf(p),t=normalize(v),col=t===null?[120,130,145]:ramp(t);
+        ptX.globalAlpha=(state.activeBorne!==null&&p.borneId!==state.activeBorne)?0.25:1;
         ptX.beginPath();ptX.arc(p.x,p.y,r+3,0,7);ptX.fillStyle="rgba(8,11,15,.85)";ptX.fill();
         ptX.beginPath();ptX.arc(p.x,p.y,r,0,7);ptX.fillStyle=rgbStr(col);ptX.fill();
         ptX.lineWidth=2;ptX.strokeStyle="rgba(8,11,15,.9)";ptX.stroke();
@@ -533,6 +536,7 @@
         var tw=ptX.measureText(String(txt)).width;
         ptX.fillRect(p.x-tw/2-5,ty-fs/2-3,tw+10,fs+6);
         ptX.fillStyle="#E6EAF0";ptX.fillText(String(txt),p.x,ty);
+        ptX.globalAlpha=1;
       });
     }
     drawCalibOverlay();
@@ -570,34 +574,48 @@
 
   // ---- Icônes bornes ----
   function renderBorneIcons(){
-    var baseS=Math.max(9,Math.round(Math.max(state.imgW,state.imgH)/130));
-    if(state.pixPerMeter) baseS=Math.max(7,Math.round(0.25*state.pixPerMeter));
+    var baseS=state.pixPerMeter?Math.max(7,Math.round(0.25*state.pixPerMeter)):Math.max(9,Math.round(Math.max(state.imgW,state.imgH)/130));
     state.bornes.forEach(function(b){
       var col=borneColor(b),x=b.x,y=b.y,s=baseS;
-      var isActive=state.activeSession===b.id;
-      ptX.save();ptX.globalAlpha=b.frozen?0.55:1;
-      // Cercle de rayon d'influence (pointillé)
+      var isActive=state.activeSession===b.id,isSelected=state.activeBorne===b.id;
+      ptX.save();
+      // Cercle d'influence
       ptX.beginPath();ptX.arc(x,y,state.radius,0,Math.PI*2);
-      ptX.setLineDash([6,3]);ptX.strokeStyle=col;ptX.lineWidth=1.5;ptX.globalAlpha=b.frozen?0.2:0.3;ptX.stroke();
+      ptX.setLineDash([5,4]);ptX.strokeStyle=col;ptX.lineWidth=isSelected?2:1.5;
+      ptX.globalAlpha=b.frozen?0.18:isSelected?0.45:0.25;ptX.stroke();
       ptX.setLineDash([]);ptX.globalAlpha=b.frozen?0.55:1;
-      // Halo actif
-      ptX.beginPath();ptX.arc(x,y,s+(isActive?8:5),0,Math.PI*2);
-      ptX.fillStyle=isActive?"rgba(56,189,248,.18)":"rgba(8,11,15,.75)";ptX.fill();
-      if(isActive){ptX.beginPath();ptX.arc(x,y,s+8,0,Math.PI*2);ptX.strokeStyle=col;ptX.lineWidth=1.5;ptX.stroke();}
-      // Diamant
-      ptX.beginPath();ptX.moveTo(x,y-s*1.2);ptX.lineTo(x+s,y);ptX.lineTo(x,y+s*0.8);ptX.lineTo(x-s,y);ptX.closePath();
-      ptX.fillStyle=col;ptX.fill();ptX.lineWidth=1.5;ptX.strokeStyle="rgba(255,255,255,.35)";ptX.stroke();
-      // Ondes radio
-      [s*2.2,s*3.4].forEach(function(ar){
-        ptX.beginPath();ptX.arc(x,y,ar,Math.PI*1.18,Math.PI*1.82);
-        ptX.strokeStyle=col;ptX.lineWidth=Math.max(1.5,s*0.18);ptX.stroke();
+      // Anneau de sélection / session active
+      if(isSelected||isActive){
+        ptX.beginPath();ptX.arc(x,y,s+5,0,Math.PI*2);
+        ptX.strokeStyle="#fff";ptX.lineWidth=2;
+        ptX.globalAlpha=isActive?0.9:0.55;ptX.stroke();
+        ptX.globalAlpha=b.frozen?0.55:1;
+      }
+      // Cercle principal
+      ptX.beginPath();ptX.arc(x,y,s,0,Math.PI*2);
+      ptX.fillStyle=col;ptX.fill();
+      // Icône antenne blanche (tige + 2 arcs internes)
+      var lw=Math.max(1.5,s*0.13),ay=y-s*0.15;
+      ptX.strokeStyle="rgba(255,255,255,.92)";ptX.lineWidth=lw;
+      ptX.beginPath();ptX.moveTo(x,y+s*0.45);ptX.lineTo(x,ay);ptX.stroke();
+      [s*0.42,s*0.22].forEach(function(ar){
+        ptX.beginPath();ptX.arc(x,ay,ar,Math.PI*1.22,Math.PI*1.78);ptX.stroke();
       });
+      ptX.beginPath();ptX.arc(x,ay,lw,0,Math.PI*2);
+      ptX.fillStyle="rgba(255,255,255,.92)";ptX.fill();
+      // Badge gelée
+      if(b.frozen){
+        ptX.font="700 "+Math.round(s*0.85)+"px sans-serif";
+        ptX.textAlign="right";ptX.textBaseline="bottom";
+        ptX.fillStyle="#fff";ptX.fillText("✓",x+s*0.85,y-s*0.55);
+      }
       // Étiquette
-      var label=(b.name||"B"+b.id)+(b.frozen?" ✓":"");
-      var fs=Math.max(10,Math.round(s*1.2));
-      ptX.font="700 "+fs+"px ui-monospace,Consolas,monospace";ptX.textAlign="center";ptX.textBaseline="middle";
-      var ty=y+s*1.2+fs+4,tw=ptX.measureText(label).width;
-      ptX.fillStyle="rgba(8,11,15,.9)";ptX.fillRect(x-tw/2-5,ty-fs/2-2,tw+10,fs+4);
+      var label=b.name||"B"+b.id;
+      var fs=Math.max(10,Math.round(s*1.15));
+      ptX.font="700 "+fs+"px ui-monospace,Consolas,monospace";
+      ptX.textAlign="center";ptX.textBaseline="middle";
+      var ty=y+s+fs*0.7+4,tw=ptX.measureText(label).width;
+      ptX.fillStyle="rgba(8,11,15,.88)";ptX.fillRect(x-tw/2-5,ty-fs/2-2,tw+10,fs+4);
       ptX.fillStyle=col;ptX.fillText(label,x,ty);
       ptX.restore();
     });
@@ -878,41 +896,72 @@
       return;
     }
 
-    // Mode mesure : borne en priorité → clic sur borne = affiche ses mesures
+    // Hit test borne commun (mesure + select)
     var baseS=Math.max(9,Math.round(Math.max(state.imgW,state.imgH)/130));
     if(state.pixPerMeter)baseS=Math.max(7,Math.round(0.25*state.pixPerMeter));
     var rBorne=(baseS+8)*(baseS+8),hitBorne=null,bestBorne=rBorne;
     state.bornes.forEach(function(b){var d=(b.x-c.x)*(b.x-c.x)+(b.y-c.y)*(b.y-c.y);if(d<bestBorne){bestBorne=d;hitBorne=b;}});
     if(hitBorne){
       state.activeBorne=hitBorne.id;updateBorneFilterSelect();switchTab("mesures");renderStats();
-      status("Borne "+(hitBorne.name||hitBorne.id)+" : "+state.points.filter(function(p){return p.borneId===hitBorne.id;}).length+" point(s)");
+      status("Borne "+(hitBorne.name||hitBorne.id)+" · "+state.points.filter(function(p){return p.borneId===hitBorne.id;}).length+" pt · Ctrl+E pour exporter");
       return;
     }
 
-    // Hit test points existants
+    // Hit test points
     var rP=Math.max(12,Math.max(state.imgW,state.imgH)/120),hit=null,best=rP*rP;
     state.points.forEach(function(p){var d=(p.x-c.x)*(p.x-c.x)+(p.y-c.y)*(p.y-c.y);if(d<best){best=d;hit=p;}});
-    if(hit){openEditorFor(hit);}else{openEditorNew(clientX,clientY,c.x,c.y);}
+    if(hit){openEditorFor(hit);return;}
+
+    // Mode select : pas de création
+    if(state.mode==="select")return;
+
+    openEditorNew(clientX,clientY,c.x,c.y);
   }
 
-  ptC.addEventListener("click",function(e){handleCanvasAction(e.clientX,e.clientY);});
+  // ---- Pan souris ----
+  var mouse={down:false,startX:0,startY:0,lastX:0,lastY:0,panning:false};
+  var wasPanning=false;
+  stageEl.addEventListener("mousedown",function(e){
+    if(e.button!==0||!state.img)return;
+    mouse.down=true;mouse.panning=false;
+    mouse.startX=mouse.lastX=e.clientX;mouse.startY=mouse.lastY=e.clientY;
+  });
+  stageEl.addEventListener("mousemove",function(e){
+    if(!mouse.down)return;
+    if(!mouse.panning&&Math.hypot(e.clientX-mouse.startX,e.clientY-mouse.startY)>5){
+      mouse.panning=true;stageEl.style.cursor="grabbing";
+    }
+    if(mouse.panning){view.ox+=e.clientX-mouse.lastX;view.oy+=e.clientY-mouse.lastY;applyTransform();}
+    mouse.lastX=e.clientX;mouse.lastY=e.clientY;
+  });
+  stageEl.addEventListener("mouseup",function(){
+    if(!mouse.down)return;
+    wasPanning=mouse.panning;mouse.down=false;mouse.panning=false;stageEl.style.cursor="";
+  });
+
+  ptC.addEventListener("click",function(e){
+    if(wasPanning){wasPanning=false;return;}
+    handleCanvasAction(e.clientX,e.clientY);
+  });
 
   // ---- Mode ----
   function setMode(m){
     state.mode=m;
-    ["modeMesure","modeBorne","modeCalib"].forEach(function(id){
-      $( id).classList.remove("active","calib");
+    ["modeMesure","modeBorne","modeCalib","modeSelect"].forEach(function(id){
+      $(id).classList.remove("active","calib");
     });
     if(m==="mesure")$("modeMesure").classList.add("active");
     else if(m==="borne")$("modeBorne").classList.add("active");
-    else if(m==="calibrate"){$("modeCalib").classList.add("active","calib");}
-    ptC.className=m==="borne"?"mode-borne":m==="calibrate"?"mode-calibrate":"";
+    else if(m==="calibrate")$("modeCalib").classList.add("active","calib");
+    else if(m==="select")$("modeSelect").classList.add("active");
+    ptC.className=m==="borne"?"mode-borne":m==="calibrate"?"mode-calibrate":m==="select"?"mode-select":"";
     closeEditor();closeBorneEditor();
     if(m!=="calibrate"&&state.calPts.length===1)state.calPts=[];
   }
   $("modeMesure").onclick=function(){setMode("mesure");};
   $("modeBorne").onclick=function(){setMode("borne");};
   $("modeCalib").onclick=function(){state.calPts=[];setMode("calibrate");status("Clique sur le premier point de référence sur le plan.");};
+  $("modeSelect").onclick=function(){setMode("select");status("Mode sélection — clic sur borne ou point.");};
   $("btnAddBorne").onclick=function(){setMode("borne");status("Mode borne actif — clique sur le plan.");};
 
   // ---- Export PNG ----
@@ -1036,6 +1085,9 @@
   $("beOk").onclick=commitBorneEditor;$("beDelete").onclick=deleteBorne;
   borneEd.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();commitBorneEditor();}if(e.key==="Escape")closeBorneEditor();});
 
+  document.addEventListener("keydown",function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==="e"){e.preventDefault();if(state.img)exportPNG();}
+  });
   window.addEventListener("beforeunload",function(e){if(state.dirty){e.preventDefault();e.returnValue="";}});
 
   syncControls();
