@@ -6,121 +6,84 @@
 <title>DECT Coverage Mapper — Cartographie de couverture DECT</title>
 <style>
   :root{
-    --bg:#0E1116;
-    --panel:#171C24;
-    --panel-2:#1E242E;
-    --line:#2A323D;
-    --line-soft:#222933;
-    --txt:#E6EAF0;
-    --muted:#8A94A3;
-    --muted-2:#5C6573;
-    --accent:#38BDF8;
-    --accent-dim:#1d6a8a;
-    --good:#22C55E;
-    --mid:#EAB308;
-    --warn:#F97316;
-    --bad:#EF4444;
-    --mono: ui-monospace, "Cascadia Code", "Consolas", "SF Mono", Menlo, monospace;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --bg:#0E1116;--panel:#171C24;--panel-2:#1E242E;
+    --line:#2A323D;--line-soft:#222933;
+    --txt:#E6EAF0;--muted:#8A94A3;--muted-2:#5C6573;
+    --accent:#38BDF8;--accent-dim:#1d6a8a;
+    --good:#22C55E;--mid:#EAB308;--warn:#F97316;--bad:#EF4444;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;height:100%;}
-  body{
-    background:var(--bg);
-    color:var(--txt);
-    font-family:var(--sans);
-    font-size:14px;
-    -webkit-font-smoothing:antialiased;
-    display:flex;
-    flex-direction:column;
-    height:100vh;
-    overflow:hidden;
-  }
-
-  /* ---- Header ---- */
-  header{
-    display:flex;align-items:center;gap:16px;
-    padding:10px 18px;
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;
+    -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+  header{display:flex;align-items:center;gap:16px;padding:10px 18px;
     border-bottom:1px solid var(--line);
-    background:linear-gradient(180deg,#10151c,#0e1116);
-    flex:0 0 auto;
-  }
+    background:linear-gradient(180deg,#10151c,#0e1116);flex:0 0 auto;}
   .logo{display:flex;align-items:center;gap:11px;}
-  .logo .mark{
-    width:30px;height:30px;border-radius:7px;
-    background:radial-gradient(circle at 50% 50%, #38BDF8 0%, #38BDF8 18%, transparent 19%),
-               radial-gradient(circle at 50% 50%, transparent 36%, #2a6f8e 37%, transparent 38%),
-               radial-gradient(circle at 50% 50%, transparent 54%, #1d4456 55%, transparent 56%);
-    background-color:#0c1014;
-    border:1px solid var(--line);
-    flex:0 0 auto;
-  }
+  .logo .mark{width:30px;height:30px;border-radius:7px;
+    background:radial-gradient(circle at 50% 50%,#38BDF8 0%,#38BDF8 18%,transparent 19%),
+               radial-gradient(circle at 50% 50%,transparent 36%,#2a6f8e 37%,transparent 38%),
+               radial-gradient(circle at 50% 50%,transparent 54%,#1d4456 55%,transparent 56%);
+    background-color:#0c1014;border:1px solid var(--line);flex:0 0 auto;}
   .logo h1{font-size:15px;font-weight:650;letter-spacing:.3px;margin:0;}
   .logo h1 span{color:var(--muted);font-weight:400;}
-  .site-name{
-    background:transparent;border:1px solid var(--line);color:var(--txt);
-    border-radius:7px;padding:7px 11px;font-family:var(--sans);font-size:13px;
-    min-width:220px;
-  }
+  .site-name{background:transparent;border:1px solid var(--line);color:var(--txt);
+    border-radius:7px;padding:7px 11px;font-family:var(--sans);font-size:13px;min-width:220px;}
   .site-name::placeholder{color:var(--muted-2);}
   .site-name:focus{outline:none;border-color:var(--accent-dim);}
   .header-actions{margin-left:auto;display:flex;gap:8px;}
-
-  button.btn{
-    font-family:var(--sans);font-size:13px;
-    background:var(--panel-2);color:var(--txt);
-    border:1px solid var(--line);border-radius:7px;
-    padding:7px 13px;cursor:pointer;transition:.12s;
-    display:inline-flex;align-items:center;gap:7px;
-  }
+  button.btn{font-family:var(--sans);font-size:13px;background:var(--panel-2);color:var(--txt);
+    border:1px solid var(--line);border-radius:7px;padding:7px 13px;cursor:pointer;transition:.12s;
+    display:inline-flex;align-items:center;gap:7px;}
   button.btn:hover{border-color:var(--accent-dim);background:#232b36;}
   button.btn.primary{background:var(--accent);color:#06222e;border-color:var(--accent);font-weight:600;}
   button.btn.primary:hover{background:#5cc9fa;}
   button.btn.ghost{background:transparent;}
   button.btn:disabled{opacity:.4;cursor:not-allowed;}
-
-  /* ---- Main layout ---- */
   .main{flex:1 1 auto;display:flex;min-height:0;}
-  .stage{
-    flex:1 1 auto;position:relative;min-width:0;
-    background:
-      repeating-linear-gradient(0deg,#10141a 0,#10141a 1px,transparent 1px,transparent 28px),
-      repeating-linear-gradient(90deg,#10141a 0,#10141a 1px,transparent 1px,transparent 28px),
-      #0b0e13;
-    overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px;
-  }
+  .stage{flex:1 1 auto;position:relative;min-width:0;
+    background:repeating-linear-gradient(0deg,#10141a 0,#10141a 1px,transparent 1px,transparent 28px),
+               repeating-linear-gradient(90deg,#10141a 0,#10141a 1px,transparent 1px,transparent 28px),#0b0e13;
+    overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px;}
   .canvas-wrap{position:relative;line-height:0;box-shadow:0 12px 40px rgba(0,0,0,.5);max-width:100%;}
   .canvas-wrap canvas{display:block;max-width:100%;height:auto;}
   #planCanvas{background:#fff;}
   #heatCanvas,#pointCanvas{position:absolute;left:0;top:0;width:100%;height:100%;}
   #pointCanvas{cursor:crosshair;}
-
-  .empty{
-    text-align:center;color:var(--muted);max-width:420px;
-  }
+  #pointCanvas.mode-borne{cursor:cell;}
+  .empty{text-align:center;color:var(--muted);max-width:420px;}
   .empty .big{font-size:42px;margin-bottom:6px;color:var(--muted-2);}
   .empty h2{color:var(--txt);font-weight:600;font-size:18px;margin:0 0 8px;}
   .empty p{line-height:1.6;margin:0 0 18px;}
-
-  /* ---- Sidebar ---- */
-  aside{
-    flex:0 0 312px;border-left:1px solid var(--line);
-    background:var(--panel);display:flex;flex-direction:column;min-height:0;
-  }
-  .panel-scroll{overflow-y:auto;padding:4px 0 16px;}
+  .mode-bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:30;
+    display:none;background:var(--panel);border:1px solid var(--line);
+    border-radius:9px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.6);}
+  .mode-btn{padding:8px 18px;border:none;background:transparent;color:var(--muted);
+    font-family:var(--sans);font-size:13px;cursor:pointer;transition:.12s;white-space:nowrap;}
+  .mode-btn.active{background:var(--accent);color:#06222e;font-weight:600;}
+  .mode-btn:not(.active):hover{color:var(--txt);}
+  aside{flex:0 0 316px;border-left:1px solid var(--line);background:var(--panel);
+    display:flex;flex-direction:column;min-height:0;}
+  .tabs{display:flex;flex:0 0 auto;border-bottom:1px solid var(--line);}
+  .tab-btn{flex:1;padding:10px 4px;border:none;background:transparent;color:var(--muted);
+    font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.3px;
+    cursor:pointer;transition:.12s;border-bottom:2px solid transparent;}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .tab-btn:not(.active):hover{color:var(--txt);}
+  .tab-pane{flex:1 1 auto;overflow-y:auto;padding:4px 0 16px;display:none;}
+  .tab-pane.active{display:block;}
   .group{padding:15px 18px;border-bottom:1px solid var(--line-soft);}
-  .group h3{
-    font-size:11px;text-transform:uppercase;letter-spacing:1.4px;
-    color:var(--muted);font-weight:600;margin:0 0 13px;
-  }
+  .group h3{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;
+    color:var(--muted);font-weight:600;margin:0 0 13px;}
+  .group-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+  .group-head h3{margin:0;}
   .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-  .seg button{
-    flex:1;background:var(--panel-2);border:none;color:var(--muted);
-    padding:9px 0;font-family:var(--sans);font-size:13px;cursor:pointer;transition:.12s;
-  }
+  .seg button{flex:1;background:var(--panel-2);border:none;color:var(--muted);
+    padding:9px 0;font-family:var(--sans);font-size:13px;cursor:pointer;transition:.12s;}
   .seg button.active{background:var(--accent);color:#06222e;font-weight:650;}
   .seg button:not(.active):hover{color:var(--txt);}
-
   .ctrl{margin-bottom:14px;}
   .ctrl:last-child{margin-bottom:0;}
   .ctrl label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px;}
@@ -128,54 +91,46 @@
   input[type=range]{width:100%;accent-color:var(--accent);}
   .row2{display:flex;gap:10px;}
   .row2 .ctrl{flex:1;}
-  input.num{
-    width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--txt);
-    border-radius:7px;padding:8px 9px;font-family:var(--mono);font-size:13px;
-  }
+  input.num{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--txt);
+    border-radius:7px;padding:8px 9px;font-family:var(--mono);font-size:13px;}
   input.num:focus{outline:none;border-color:var(--accent-dim);}
-
   .check{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;font-size:13px;}
   .check input{accent-color:var(--accent);width:15px;height:15px;}
-
-  /* ---- Legend ---- */
   .legend-bar{height:14px;border-radius:4px;
-    background:linear-gradient(90deg,var(--bad),var(--warn),var(--mid),var(--good));
-    border:1px solid var(--line);}
+    background:linear-gradient(90deg,var(--bad),var(--warn),var(--mid),var(--good));border:1px solid var(--line);}
   .legend-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;}
-
-  /* ---- Points list ---- */
   .pt-stats{display:flex;gap:8px;margin-bottom:11px;}
   .pt-stat{flex:1;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:8px;padding:9px 10px;}
   .pt-stat .v{font-family:var(--mono);font-size:17px;font-weight:600;}
   .pt-stat .k{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px;}
-  .pt-list{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;}
-  .pt-item{
-    display:flex;align-items:center;gap:9px;background:var(--panel-2);
-    border:1px solid var(--line-soft);border-radius:7px;padding:7px 9px;cursor:pointer;font-size:12.5px;
-  }
-  .pt-item:hover{border-color:var(--accent-dim);}
+  .pt-list,.borne-list{display:flex;flex-direction:column;gap:5px;max-height:210px;overflow-y:auto;}
+  .pt-item,.borne-item{display:flex;align-items:center;gap:8px;background:var(--panel-2);
+    border:1px solid var(--line-soft);border-radius:7px;padding:7px 9px;cursor:pointer;font-size:12.5px;}
+  .pt-item:hover,.borne-item:hover{border-color:var(--accent-dim);}
   .pt-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;}
-  .pt-item .meta{font-family:var(--mono);color:var(--muted);margin-left:auto;}
+  .borne-dot{width:11px;height:11px;border-radius:2px;transform:rotate(45deg);flex:0 0 auto;margin:1px;}
+  .pt-item .meta,.borne-item .meta{font-family:var(--mono);color:var(--muted);margin-left:auto;white-space:nowrap;font-size:11.5px;}
   .pt-empty{color:var(--muted-2);font-size:12.5px;text-align:center;padding:14px 0;}
-
-  /* ---- Point editor popup ---- */
-  #editor{
-    position:absolute;z-index:40;width:208px;
-    background:var(--panel);border:1px solid var(--accent-dim);border-radius:10px;
-    box-shadow:0 14px 38px rgba(0,0,0,.6);padding:13px;display:none;
-  }
-  #editor h4{margin:0 0 10px;font-size:12px;letter-spacing:.4px;color:var(--accent);text-transform:uppercase;}
-  #editor .row{display:flex;gap:8px;margin-bottom:9px;}
-  #editor .field{flex:1;}
-  #editor .field span{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px;}
-  #editor input{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--txt);
-    border-radius:6px;padding:7px;font-family:var(--mono);font-size:13px;}
-  #editor input:focus{outline:none;border-color:var(--accent);}
-  #editor .ed-actions{display:flex;gap:7px;margin-top:3px;}
-  #editor .ed-actions button{flex:1;font-size:12px;padding:6px 0;}
-  .del{background:transparent;border:1px solid var(--line);color:var(--bad);border-radius:6px;cursor:pointer;}
+  .borne-tag{font-size:10px;font-family:var(--mono);padding:1px 5px;border-radius:4px;white-space:nowrap;flex:0 0 auto;}
+  select.bsel{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--txt);
+    border-radius:7px;padding:8px 9px;font-family:var(--sans);font-size:13px;cursor:pointer;}
+  select.bsel:focus{outline:none;border-color:var(--accent-dim);}
+  .popup{position:absolute;z-index:40;width:216px;background:var(--panel);
+    border:1px solid var(--accent-dim);border-radius:10px;
+    box-shadow:0 14px 38px rgba(0,0,0,.6);padding:13px;display:none;}
+  .popup h4{margin:0 0 10px;font-size:12px;letter-spacing:.4px;color:var(--accent);text-transform:uppercase;}
+  .popup .prow{display:flex;gap:8px;margin-bottom:9px;}
+  .popup .prow .field{margin-bottom:0;}
+  .popup .field{flex:1;margin-bottom:9px;}
+  .popup .field span{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px;}
+  .popup input,.popup select{width:100%;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--txt);border-radius:6px;padding:7px;font-family:var(--mono);font-size:13px;}
+  .popup input:focus,.popup select:focus{outline:none;border-color:var(--accent);}
+  .popup .ed-actions{display:flex;gap:7px;margin-top:4px;}
+  .popup .ed-actions button{flex:1;font-size:12px;padding:6px 0;}
+  .del{background:transparent;border:1px solid var(--line);color:var(--bad);border-radius:6px;
+    cursor:pointer;font-family:var(--sans);}
   .del:hover{border-color:var(--bad);}
-
   .hint{font-size:11.5px;color:var(--muted-2);line-height:1.5;margin-top:10px;}
   input[type=file]{display:none;}
   footer{flex:0 0 auto;padding:7px 18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted-2);display:flex;justify-content:space-between;}
@@ -203,19 +158,26 @@
 
 <div class="main">
   <div class="stage" id="stage">
+    <div class="mode-bar" id="modeBar">
+      <button class="mode-btn active" id="modeMesure">📍 Mesure</button>
+      <button class="mode-btn" id="modeBorne">📡 Borne</button>
+    </div>
+
     <div class="empty" id="empty">
       <div class="big">⬚</div>
       <h2>Charge un plan pour commencer</h2>
-      <p>Importe le plan de l'étage (image PNG/JPG). Puis clique sur le plan à chaque point de mesure et saisis le RSSI lu sur le combiné Yealink (mode mesure <b style="font-family:var(--mono)">*1234203#</b>) ainsi que la frame quality.</p>
+      <p>Importe le plan de l'étage (PNG/JPG). Place les bornes DECT, puis clique à chaque point de mesure pour saisir le RSSI et la qualité lus sur le combiné Yealink (<b style="font-family:var(--mono)">*1234203#</b>).</p>
       <button class="btn primary" id="btnPlan2">Charger un plan</button>
     </div>
+
     <div class="canvas-wrap" id="wrap" style="display:none;">
       <canvas id="planCanvas"></canvas>
       <canvas id="heatCanvas"></canvas>
       <canvas id="pointCanvas"></canvas>
-      <div id="editor">
+
+      <div id="editor" class="popup">
         <h4 id="edTitle">Nouveau point</h4>
-        <div class="row">
+        <div class="prow">
           <div class="field">
             <span>RSSI (dBm)</span>
             <input id="edRssi" type="number" step="1" placeholder="-65" inputmode="numeric">
@@ -225,20 +187,78 @@
             <input id="edQual" type="number" step="1" min="0" max="100" placeholder="100" inputmode="numeric">
           </div>
         </div>
-        <div class="field" style="margin-bottom:9px;">
+        <div class="field">
+          <span>Borne captée</span>
+          <select id="edBorne"></select>
+        </div>
+        <div class="field">
           <span>Repère (option)</span>
-          <input id="edLabel" type="text" placeholder="Base, local…">
+          <input id="edLabel" type="text" placeholder="Local, couloir…">
         </div>
         <div class="ed-actions">
           <button class="del" id="edDelete">Suppr.</button>
           <button class="btn primary" id="edOk">OK</button>
         </div>
       </div>
+
+      <div id="borneEditor" class="popup">
+        <h4 id="beTitle">Nouvelle borne</h4>
+        <div class="field">
+          <span>Nom / identifiant</span>
+          <input id="beNom" type="text" placeholder="B1, RDC-Bureau…">
+        </div>
+        <div class="ed-actions">
+          <button class="del" id="beDelete">Suppr.</button>
+          <button class="btn primary" id="beOk">OK</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <aside>
-    <div class="panel-scroll">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="bornes">📡 Bornes</button>
+      <button class="tab-btn" data-tab="mesures">📍 Mesures</button>
+      <button class="tab-btn" data-tab="reglages">⚙ Réglages</button>
+    </div>
+
+    <div id="tab-bornes" class="tab-pane active">
+      <div class="group">
+        <div class="group-head">
+          <h3>Bornes DECT</h3>
+          <button class="btn" id="btnAddBorne" style="padding:4px 10px;font-size:12px;">+ Borne</button>
+        </div>
+        <div class="borne-list" id="borneList">
+          <div class="pt-empty">Aucune borne. Passe en mode borne et clique sur le plan.</div>
+        </div>
+      </div>
+      <div class="group">
+        <h3>Heatmap — filtrer par borne</h3>
+        <select class="bsel" id="borneFilter">
+          <option value="">Toutes les bornes</option>
+        </select>
+        <div class="hint">Sélectionne une borne pour n'afficher que ses mesures.</div>
+      </div>
+    </div>
+
+    <div id="tab-mesures" class="tab-pane">
+      <div class="group">
+        <h3>Statistiques</h3>
+        <div class="pt-stats">
+          <div class="pt-stat"><div class="v" id="statCount">0</div><div class="k">points</div></div>
+          <div class="pt-stat"><div class="v" id="statAvg">—</div><div class="k" id="statAvgK">RSSI moy.</div></div>
+          <div class="pt-stat"><div class="v" id="statMin">—</div><div class="k">pire</div></div>
+        </div>
+      </div>
+      <div class="group">
+        <h3>Points de mesure</h3>
+        <div class="pt-list" id="ptList">
+          <div class="pt-empty">Aucun point. Clique sur le plan.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-reglages" class="tab-pane">
       <div class="group">
         <h3>Métrique cartographiée</h3>
         <div class="seg" id="metricSeg">
@@ -246,7 +266,6 @@
           <button data-m="qual">Qualité (%)</button>
         </div>
       </div>
-
       <div class="group">
         <h3>Affichage</h3>
         <div class="ctrl">
@@ -263,7 +282,6 @@
         </div>
         <label class="check"><input type="checkbox" id="showPts" checked> Afficher les points de mesure</label>
       </div>
-
       <div class="group" id="seuilsGroup">
         <h3>Seuils RSSI</h3>
         <div class="row2">
@@ -276,54 +294,46 @@
             <input class="num" id="badBound" type="number" value="-90" step="1">
           </div>
         </div>
-        <div class="hint">Reco Yealink&nbsp;: -28 à -70&nbsp;dBm = bon, jusqu'à -85&nbsp;dBm acceptable en appel.</div>
+        <div class="hint">Reco Yealink : -28 à -70 dBm = bon, jusqu'à -85 dBm acceptable en appel.</div>
       </div>
-
       <div class="group">
         <h3>Légende</h3>
         <div class="legend-bar"></div>
         <div class="legend-labels"><span id="legLow">mauvais</span><span id="legHigh">bon</span></div>
-      </div>
-
-      <div class="group">
-        <h3>Points de mesure</h3>
-        <div class="pt-stats">
-          <div class="pt-stat"><div class="v" id="statCount">0</div><div class="k">points</div></div>
-          <div class="pt-stat"><div class="v" id="statAvg">—</div><div class="k" id="statAvgK">RSSI moy.</div></div>
-          <div class="pt-stat"><div class="v" id="statMin">—</div><div class="k">pire</div></div>
-        </div>
-        <div class="pt-list" id="ptList"><div class="pt-empty">Aucun point. Clique sur le plan.</div></div>
       </div>
     </div>
   </aside>
 </div>
 
 <footer>
-  <span>Hors-ligne · données stockées localement dans le fichier · aucune connexion requise</span>
+  <span>Hors-ligne · données locales · aucune connexion requise</span>
   <span id="fStatus">Prêt</span>
 </footer>
 
 <script>
 "use strict";
 (function(){
-  // ---------- State ----------
-  var state = {
-    img:null, imgW:0, imgH:0,
-    points:[],            // {id,x,y,rssi,qual,label}
+  var BORNE_COLORS=['#38BDF8','#A78BFA','#F472B6','#34D399','#FBBF24','#F87171','#60A5FA','#C084FC'];
+
+  var state={
+    img:null,imgW:0,imgH:0,
+    points:[],   // {id,x,y,rssi,qual,label,borneId}
+    bornes:[],   // {id,x,y,name}
     metric:"rssi",
-    opacity:70, radius:120, smoothPow:2.0,
-    showPts:true, goodBound:-60, badBound:-90,
-    nextId:1
+    opacity:70,radius:120,smoothPow:2.0,
+    showPts:true,goodBound:-60,badBound:-90,
+    nextId:1,borneNextId:1,
+    mode:"mesure",
+    activeBorne:null
   };
-  var editing = {id:null, pending:null};
+  var editing={id:null,pending:null};
+  var bEditing={id:null,pending:null};
 
-  // ---------- Elements ----------
-  var $ = function(id){return document.getElementById(id);};
-  var planC=$("planCanvas"), heatC=$("heatCanvas"), ptC=$("pointCanvas");
-  var planX=planC.getContext("2d"), heatX=heatC.getContext("2d"), ptX=ptC.getContext("2d");
-  var wrap=$("wrap"), empty=$("empty"), editor=$("editor");
+  var $=function(id){return document.getElementById(id);};
+  var planC=$("planCanvas"),heatC=$("heatCanvas"),ptC=$("pointCanvas");
+  var planX=planC.getContext("2d"),heatX=heatC.getContext("2d"),ptX=ptC.getContext("2d");
+  var wrap=$("wrap"),empty=$("empty"),editor=$("editor"),borneEd=$("borneEditor");
 
-  // ---------- Color ramp (red -> orange -> yellow -> green) ----------
   var STOPS=[[0,[239,68,68]],[0.40,[249,115,22]],[0.65,[234,179,8]],[1,[34,197,94]]];
   function ramp(t){
     t=Math.max(0,Math.min(1,t));
@@ -331,34 +341,34 @@
       var a=STOPS[i],b=STOPS[i+1];
       if(t>=a[0]&&t<=b[0]){
         var f=(t-a[0])/(b[0]-a[0]);
-        return [Math.round(a[1][0]+(b[1][0]-a[1][0])*f),
-                Math.round(a[1][1]+(b[1][1]-a[1][1])*f),
-                Math.round(a[1][2]+(b[1][2]-a[1][2])*f)];
+        return[Math.round(a[1][0]+(b[1][0]-a[1][0])*f),
+               Math.round(a[1][1]+(b[1][1]-a[1][1])*f),
+               Math.round(a[1][2]+(b[1][2]-a[1][2])*f)];
       }
     }
     return STOPS[STOPS.length-1][1];
   }
-  function rgbStr(c){return "rgb("+c[0]+","+c[1]+","+c[2]+")";}
+  function rgbStr(c){return"rgb("+c[0]+","+c[1]+","+c[2]+")";}
+  function borneColor(b){return BORNE_COLORS[(b.id-1)%BORNE_COLORS.length];}
 
-  // value -> normalized t (1 = good/green, 0 = bad/red)
   function normalize(v){
-    if(v===null||v===undefined||isNaN(v)) return null;
-    if(state.metric==="qual") return Math.max(0,Math.min(1,v/100));
-    var g=state.goodBound, b=state.badBound;        // g e.g. -60, b e.g. -90
-    if(g===b) return 0.5;
+    if(v===null||v===undefined||isNaN(v))return null;
+    if(state.metric==="qual")return Math.max(0,Math.min(1,v/100));
+    var g=state.goodBound,b=state.badBound;
+    if(g===b)return 0.5;
     return Math.max(0,Math.min(1,(v-b)/(g-b)));
   }
   function valueOf(p){return state.metric==="qual"?p.qual:p.rssi;}
 
-  // ---------- Plan loading ----------
   function loadImage(src){
     var im=new Image();
     im.onload=function(){
-      state.img=im; state.imgW=im.naturalWidth; state.imgH=im.naturalHeight;
+      state.img=im;state.imgW=im.naturalWidth;state.imgH=im.naturalHeight;
       [planC,heatC,ptC].forEach(function(c){c.width=state.imgW;c.height=state.imgH;});
       planX.drawImage(im,0,0);
-      empty.style.display="none"; wrap.style.display="block";
-      $("btnExport").disabled=false; $("btnSave").disabled=false;
+      empty.style.display="none";wrap.style.display="block";
+      $("modeBar").style.display="flex";
+      $("btnExport").disabled=false;$("btnSave").disabled=false;
       renderAll();
       status("Plan chargé · "+state.imgW+"×"+state.imgH+" px");
     };
@@ -366,223 +376,369 @@
     im.src=src;
   }
 
-  // ---------- Heatmap (IDW on a downscaled grid, then smoothed upscale) ----------
   var heatBuf=document.createElement("canvas");
   function renderHeat(){
     heatX.clearRect(0,0,state.imgW,state.imgH);
-    var valid=state.points.filter(function(p){return valueOf(p)!==null && !isNaN(valueOf(p));});
-    if(valid.length===0) return;
-
+    var valid=state.points.filter(function(p){
+      if(state.activeBorne!==null&&p.borneId!==state.activeBorne)return false;
+      return valueOf(p)!==null&&!isNaN(valueOf(p));
+    });
+    if(valid.length===0)return;
     var maxDim=Math.max(state.imgW,state.imgH);
-    var step=Math.max(1,Math.round(maxDim/260));   // grid cell size in px
-    var gw=Math.max(1,Math.ceil(state.imgW/step)), gh=Math.max(1,Math.ceil(state.imgH/step));
-    heatBuf.width=gw; heatBuf.height=gh;
+    var step=Math.max(1,Math.round(maxDim/260));
+    var gw=Math.max(1,Math.ceil(state.imgW/step)),gh=Math.max(1,Math.ceil(state.imgH/step));
+    heatBuf.width=gw;heatBuf.height=gh;
     var bx=heatBuf.getContext("2d");
     var imgData=bx.createImageData(gw,gh);
     var data=imgData.data;
-    var R=state.radius, R2=R*R, pw=state.smoothPow;
-
+    var R=state.radius,R2=R*R,pw=state.smoothPow;
     for(var gy=0;gy<gh;gy++){
       var cy=gy*step+step/2;
       for(var gx=0;gx<gw;gx++){
         var cx=gx*step+step/2;
-        var wsum=0, vsum=0, nearest=Infinity, exact=null;
+        var wsum=0,vsum=0,nearest=Infinity,exact=null;
         for(var k=0;k<valid.length;k++){
           var p=valid[k];
-          var dx=cx-p.x, dy=cy-p.y, d2=dx*dx+dy*dy;
-          if(d2<nearest) nearest=d2;
-          if(d2<1){ exact=valueOf(p); }
-          if(d2<=R2){
-            var w=1/Math.pow(d2+1e-6,pw/2);
-            wsum+=w; vsum+=w*valueOf(p);
-          }
+          var dx=cx-p.x,dy=cy-p.y,d2=dx*dx+dy*dy;
+          if(d2<nearest)nearest=d2;
+          if(d2<1)exact=valueOf(p);
+          if(d2<=R2){var w=1/Math.pow(d2+1e-6,pw/2);wsum+=w;vsum+=w*valueOf(p);}
         }
         var idx=(gy*gw+gx)*4;
-        if(nearest>R2 || wsum===0){ data[idx+3]=0; continue; }   // outside influence → transparent
-        var val = exact!==null ? exact : vsum/wsum;
+        if(nearest>R2||wsum===0){data[idx+3]=0;continue;}
+        var val=exact!==null?exact:vsum/wsum;
         var t=normalize(val);
-        if(t===null){ data[idx+3]=0; continue; }
+        if(t===null){data[idx+3]=0;continue;}
         var c=ramp(t);
-        // soft fade at the edge of influence
         var edge=1-Math.min(1,Math.sqrt(nearest)/R);
-        var alpha=Math.round(255*Math.min(1,0.35+edge*0.9));
-        data[idx]=c[0];data[idx+1]=c[1];data[idx+2]=c[2];data[idx+3]=alpha;
+        data[idx]=c[0];data[idx+1]=c[1];data[idx+2]=c[2];
+        data[idx+3]=Math.round(255*Math.min(1,0.35+edge*0.9));
       }
     }
     bx.putImageData(imgData,0,0);
-    heatX.imageSmoothingEnabled=true; heatX.imageSmoothingQuality="high";
+    heatX.imageSmoothingEnabled=true;heatX.imageSmoothingQuality="high";
     heatX.globalAlpha=state.opacity/100;
     heatX.drawImage(heatBuf,0,0,gw,gh,0,0,state.imgW,state.imgH);
     heatX.globalAlpha=1;
   }
 
-  // ---------- Points ----------
   function renderPoints(){
     ptX.clearRect(0,0,state.imgW,state.imgH);
-    if(!state.showPts) return;
-    var r=Math.max(7,Math.round(Math.max(state.imgW,state.imgH)/170));
-    var fs=Math.max(10,Math.round(r*1.45));
-    ptX.font="600 "+fs+"px ui-monospace, Consolas, monospace";
-    ptX.textAlign="center"; ptX.textBaseline="middle";
-    state.points.forEach(function(p){
-      var v=valueOf(p), t=normalize(v);
-      var col = t===null ? [120,130,145] : ramp(t);
-      // halo
-      ptX.beginPath(); ptX.arc(p.x,p.y,r+3,0,7); ptX.fillStyle="rgba(8,11,15,.85)"; ptX.fill();
-      // dot
-      ptX.beginPath(); ptX.arc(p.x,p.y,r,0,7); ptX.fillStyle=rgbStr(col); ptX.fill();
-      ptX.lineWidth=2; ptX.strokeStyle="rgba(8,11,15,.9)"; ptX.stroke();
-      // label
-      var txt = v===null ? "?" : (state.metric==="qual" ? Math.round(v) : Math.round(v));
-      var ty=p.y-r-fs*0.75;
-      ptX.fillStyle="rgba(8,11,15,.92)";
-      var tw=ptX.measureText(String(txt)).width;
-      ptX.fillRect(p.x-tw/2-5,ty-fs/2-3,tw+10,fs+6);
-      ptX.fillStyle="#E6EAF0"; ptX.fillText(String(txt),p.x,ty);
+    if(state.showPts){
+      var r=Math.max(7,Math.round(Math.max(state.imgW,state.imgH)/170));
+      var fs=Math.max(10,Math.round(r*1.45));
+      ptX.font="600 "+fs+"px ui-monospace,Consolas,monospace";
+      ptX.textAlign="center";ptX.textBaseline="middle";
+      state.points.forEach(function(p){
+        var v=valueOf(p),t=normalize(v);
+        var col=t===null?[120,130,145]:ramp(t);
+        ptX.beginPath();ptX.arc(p.x,p.y,r+3,0,7);ptX.fillStyle="rgba(8,11,15,.85)";ptX.fill();
+        ptX.beginPath();ptX.arc(p.x,p.y,r,0,7);ptX.fillStyle=rgbStr(col);ptX.fill();
+        ptX.lineWidth=2;ptX.strokeStyle="rgba(8,11,15,.9)";ptX.stroke();
+        var txt=v===null?"?":Math.round(v);
+        var ty=p.y-r-fs*0.75;
+        ptX.fillStyle="rgba(8,11,15,.92)";
+        var tw=ptX.measureText(String(txt)).width;
+        ptX.fillRect(p.x-tw/2-5,ty-fs/2-3,tw+10,fs+6);
+        ptX.fillStyle="#E6EAF0";ptX.fillText(String(txt),p.x,ty);
+      });
+    }
+    renderBorneIcons();
+  }
+
+  function renderBorneIcons(){
+    var s=Math.max(9,Math.round(Math.max(state.imgW,state.imgH)/130));
+    var fs=Math.max(10,Math.round(s*1.2));
+    state.bornes.forEach(function(b){
+      var col=borneColor(b);
+      var x=b.x,y=b.y;
+      ptX.beginPath();ptX.arc(x,y,s+5,0,Math.PI*2);
+      ptX.fillStyle="rgba(8,11,15,.75)";ptX.fill();
+      ptX.beginPath();
+      ptX.moveTo(x,y-s*1.2);ptX.lineTo(x+s,y);
+      ptX.lineTo(x,y+s*0.8);ptX.lineTo(x-s,y);
+      ptX.closePath();
+      ptX.fillStyle=col;ptX.fill();
+      ptX.lineWidth=1.5;ptX.strokeStyle="rgba(255,255,255,.35)";ptX.stroke();
+      [s*2.2,s*3.4].forEach(function(ar){
+        ptX.beginPath();ptX.arc(x,y,ar,Math.PI*1.18,Math.PI*1.82);
+        ptX.strokeStyle=col;ptX.lineWidth=Math.max(1.5,s*0.18);ptX.stroke();
+      });
+      var label=b.name||"B"+b.id;
+      ptX.font="700 "+fs+"px ui-monospace,Consolas,monospace";
+      ptX.textAlign="center";ptX.textBaseline="middle";
+      var ty=y+s*1.2+fs+4;
+      var tw=ptX.measureText(label).width;
+      ptX.fillStyle="rgba(8,11,15,.9)";
+      ptX.fillRect(x-tw/2-5,ty-fs/2-2,tw+10,fs+4);
+      ptX.fillStyle=col;ptX.fillText(label,x,ty);
     });
   }
 
-  // ---------- Sidebar / stats ----------
+  function renderAll(){renderHeat();renderPoints();renderStats();}
+
   function renderStats(){
-    $("statCount").textContent=state.points.length;
-    var vals=state.points.map(valueOf).filter(function(v){return v!==null&&!isNaN(v);});
+    var pts=state.activeBorne!==null
+      ?state.points.filter(function(p){return p.borneId===state.activeBorne;})
+      :state.points;
+    $("statCount").textContent=pts.length;
+    var vals=pts.map(valueOf).filter(function(v){return v!==null&&!isNaN(v);});
     var isR=state.metric==="rssi";
     $("statAvgK").textContent=isR?"RSSI moy.":"Qual. moy.";
     if(vals.length===0){$("statAvg").textContent="—";$("statMin").textContent="—";}
     else{
       var avg=vals.reduce(function(a,b){return a+b;},0)/vals.length;
-      var worst=isR?Math.min.apply(null,vals):Math.min.apply(null,vals);
+      var worst=Math.min.apply(null,vals);
       $("statAvg").textContent=Math.round(avg)+(isR?"":"%");
       $("statMin").textContent=Math.round(worst)+(isR?"":"%");
-      var wc=ramp(normalize(worst)||0); $("statMin").style.color=rgbStr(wc);
+      $("statMin").style.color=rgbStr(ramp(normalize(worst)||0));
     }
-    // list
+    renderPtList(pts);
+    renderBorneList();
+    updateBorneFilterSelect();
+  }
+
+  function renderPtList(pts){
     var list=$("ptList");
-    if(state.points.length===0){list.innerHTML='<div class="pt-empty">Aucun point. Clique sur le plan.</div>';return;}
+    if(!pts||pts.length===0){list.innerHTML='<div class="pt-empty">Aucun point. Clique sur le plan.</div>';return;}
     list.innerHTML="";
-    state.points.slice().reverse().forEach(function(p){
+    pts.slice().reverse().forEach(function(p){
       var v=valueOf(p),t=normalize(v),col=t===null?[120,130,145]:ramp(t);
-      var div=document.createElement("div"); div.className="pt-item";
+      var borne=state.bornes.filter(function(x){return x.id===p.borneId;})[0];
+      var btag="";
+      if(borne){
+        var bc=borneColor(borne);
+        btag='<span class="borne-tag" style="background:'+bc+'22;border:1px solid '+bc+'55;color:'+bc+'">'+
+          escHtml(borne.name||"B"+borne.id)+'</span>';
+      }
+      var div=document.createElement("div");div.className="pt-item";
       div.innerHTML='<span class="pt-dot" style="background:'+rgbStr(col)+'"></span>'+
-        '<span>'+(p.label?escapeHtml(p.label):("Point "+p.id))+'</span>'+
-        '<span class="meta">'+(p.rssi!==null?p.rssi+" dBm":"—")+' · '+(p.qual!==null?p.qual+"%":"—")+'</span>';
+        '<span>'+(p.label?escHtml(p.label):"Point "+p.id)+'</span>'+
+        btag+
+        '<span class="meta">'+(p.rssi!==null?p.rssi+" dBm":"—")+(p.qual!==null?" · "+p.qual+"%":"")+'</span>';
       div.onclick=function(){openEditorFor(p);};
       list.appendChild(div);
     });
   }
-  function escapeHtml(s){return s.replace(/[&<>"]/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});}
 
-  function renderAll(){renderHeat();renderPoints();renderStats();}
-
-  // ---------- Editor popup ----------
-  function showEditorAt(clientX,clientY,title){
-    var rect=wrap.getBoundingClientRect();
-    var ex=clientX-rect.left+8, ey=clientY-rect.top+8;
-    if(ex+220>rect.width) ex=rect.width-220; if(ex<4)ex=4;
-    if(ey+200>rect.height) ey=Math.max(4,rect.height-200);
-    editor.style.left=ex+"px"; editor.style.top=ey+"px"; editor.style.display="block";
-    $("edTitle").textContent=title;
+  function renderBorneList(){
+    var list=$("borneList");
+    if(state.bornes.length===0){
+      list.innerHTML='<div class="pt-empty">Aucune borne. Active le mode borne et clique sur le plan.</div>';
+      return;
+    }
+    list.innerHTML="";
+    state.bornes.forEach(function(b){
+      var col=borneColor(b);
+      var count=state.points.filter(function(p){return p.borneId===b.id;}).length;
+      var div=document.createElement("div");div.className="borne-item";
+      div.innerHTML='<span class="borne-dot" style="background:'+col+'"></span>'+
+        '<span>'+escHtml(b.name||"Borne "+b.id)+'</span>'+
+        '<span class="meta">'+count+' pt</span>';
+      div.onclick=function(){openBorneEditorFor(b);};
+      list.appendChild(div);
+    });
   }
+
+  function updateBorneFilterSelect(){
+    var sel=$("borneFilter");
+    sel.innerHTML='<option value="">Toutes les bornes</option>';
+    state.bornes.forEach(function(b){
+      var opt=document.createElement("option");
+      opt.value=b.id;
+      opt.textContent=b.name||"Borne "+b.id;
+      if(state.activeBorne===b.id)opt.selected=true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function updateEdBorneSelect(selectedId){
+    var sel=$("edBorne");
+    sel.innerHTML='<option value="">Aucune</option>';
+    state.bornes.forEach(function(b){
+      var opt=document.createElement("option");
+      opt.value=b.id;
+      opt.textContent=b.name||"Borne "+b.id;
+      if(b.id===selectedId)opt.selected=true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function escHtml(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  function showPopupAt(el,clientX,clientY,h){
+    h=h||280;
+    var rect=wrap.getBoundingClientRect();
+    var ex=clientX-rect.left+10,ey=clientY-rect.top+10;
+    if(ex+224>rect.width)ex=rect.width-224;if(ex<4)ex=4;
+    if(ey+h>rect.height)ey=Math.max(4,rect.height-h);
+    el.style.left=ex+"px";el.style.top=ey+"px";el.style.display="block";
+  }
+
   function openEditorNew(imgX,imgY,clientX,clientY){
-    editing.id=null; editing.pending={x:imgX,y:imgY};
-    $("edRssi").value=""; $("edQual").value=""; $("edLabel").value="";
+    editing.id=null;editing.pending={x:imgX,y:imgY};
+    $("edRssi").value="";$("edQual").value="";$("edLabel").value="";
+    updateEdBorneSelect(state.activeBorne);
     $("edDelete").style.display="none";
-    showEditorAt(clientX,clientY,"Nouveau point");
+    $("edTitle").textContent="Nouveau point";
+    showPopupAt(editor,clientX,clientY,295);
     setTimeout(function(){$("edRssi").focus();},10);
   }
   function openEditorFor(p){
-    editing.id=p.id; editing.pending=null;
+    editing.id=p.id;editing.pending=null;
     $("edRssi").value=p.rssi===null?"":p.rssi;
     $("edQual").value=p.qual===null?"":p.qual;
     $("edLabel").value=p.label||"";
+    updateEdBorneSelect(p.borneId||null);
     $("edDelete").style.display="block";
+    $("edTitle").textContent="Point "+p.id;
     var rect=wrap.getBoundingClientRect();
-    var sx=rect.left+ (p.x/state.imgW)*rect.width;
-    var sy=rect.top + (p.y/state.imgH)*rect.height;
-    showEditorAt(sx,sy,"Point "+p.id);
+    showPopupAt(editor,rect.left+(p.x/state.imgW)*rect.width,rect.top+(p.y/state.imgH)*rect.height,295);
     setTimeout(function(){$("edRssi").focus();$("edRssi").select();},10);
   }
   function closeEditor(){editor.style.display="none";editing.id=null;editing.pending=null;}
   function parseNum(el){var s=el.value.trim();if(s==="")return null;var n=parseFloat(s);return isNaN(n)?null:n;}
 
   function commitEditor(){
-    var rssi=parseNum($("edRssi")), qual=parseNum($("edQual")), label=$("edLabel").value.trim();
-    if(qual!==null) qual=Math.max(0,Math.min(100,qual));
+    var rssi=parseNum($("edRssi")),qual=parseNum($("edQual")),label=$("edLabel").value.trim();
+    var borneId=parseInt($("edBorne").value)||null;
+    if(qual!==null)qual=Math.max(0,Math.min(100,qual));
     if(editing.id!==null){
       var p=state.points.filter(function(x){return x.id===editing.id;})[0];
-      if(p){p.rssi=rssi;p.qual=qual;p.label=label;}
+      if(p){p.rssi=rssi;p.qual=qual;p.label=label;p.borneId=borneId;}
     }else if(editing.pending){
-      if(rssi===null&&qual===null){closeEditor();return;} // empty new point → discard
-      state.points.push({id:state.nextId++,x:editing.pending.x,y:editing.pending.y,rssi:rssi,qual:qual,label:label});
+      if(rssi===null&&qual===null){closeEditor();return;}
+      state.points.push({id:state.nextId++,x:editing.pending.x,y:editing.pending.y,
+        rssi:rssi,qual:qual,label:label,borneId:borneId});
     }
-    closeEditor(); renderAll(); status("Relevé : "+state.points.length+" point(s)");
+    closeEditor();renderAll();status("Relevé : "+state.points.length+" point(s)");
   }
   function deletePoint(){
-    if(editing.id!==null){state.points=state.points.filter(function(x){return x.id!==editing.id;});}
-    closeEditor(); renderAll();
+    if(editing.id!==null)state.points=state.points.filter(function(x){return x.id!==editing.id;});
+    closeEditor();renderAll();
   }
 
-  // ---------- Canvas click → add point ----------
+  function openBorneEditorNew(imgX,imgY,clientX,clientY){
+    bEditing.id=null;bEditing.pending={x:imgX,y:imgY};
+    $("beNom").value="";
+    $("beDelete").style.display="none";
+    $("beTitle").textContent="Nouvelle borne";
+    showPopupAt(borneEd,clientX,clientY,140);
+    setTimeout(function(){$("beNom").focus();},10);
+  }
+  function openBorneEditorFor(b){
+    bEditing.id=b.id;bEditing.pending=null;
+    $("beNom").value=b.name||"";
+    $("beDelete").style.display="block";
+    $("beTitle").textContent="Borne "+(b.name||b.id);
+    var rect=wrap.getBoundingClientRect();
+    showPopupAt(borneEd,rect.left+(b.x/state.imgW)*rect.width,rect.top+(b.y/state.imgH)*rect.height,140);
+    setTimeout(function(){$("beNom").focus();$("beNom").select();},10);
+  }
+  function closeBorneEditor(){borneEd.style.display="none";bEditing.id=null;bEditing.pending=null;}
+
+  function commitBorneEditor(){
+    var name=$("beNom").value.trim();
+    if(bEditing.id!==null){
+      var b=state.bornes.filter(function(x){return x.id===bEditing.id;})[0];
+      if(b)b.name=name;
+    }else if(bEditing.pending){
+      state.bornes.push({id:state.borneNextId++,x:bEditing.pending.x,y:bEditing.pending.y,name:name});
+    }
+    closeBorneEditor();renderAll();status(state.bornes.length+" borne(s)");
+  }
+  function deleteBorne(){
+    if(bEditing.id!==null){
+      state.points.forEach(function(p){if(p.borneId===bEditing.id)p.borneId=null;});
+      state.bornes=state.bornes.filter(function(x){return x.id!==bEditing.id;});
+      if(state.activeBorne===bEditing.id)state.activeBorne=null;
+    }
+    closeBorneEditor();renderAll();
+  }
+
   ptC.addEventListener("click",function(e){
-    if(!state.img) return;
+    if(!state.img)return;
     var rect=ptC.getBoundingClientRect();
     var imgX=(e.clientX-rect.left)/rect.width*state.imgW;
     var imgY=(e.clientY-rect.top)/rect.height*state.imgH;
-    // hit-test existing point
-    var rHit=Math.max(12,Math.max(state.imgW,state.imgH)/120);
-    var hit=null,best=rHit*rHit;
-    state.points.forEach(function(p){var d=(p.x-imgX)*(p.x-imgX)+(p.y-imgY)*(p.y-imgY);if(d<best){best=d;hit=p;}});
-    if(hit){openEditorFor(hit);}else{openEditorNew(imgX,imgY,e.clientX,e.clientY);}
+    closeEditor();closeBorneEditor();
+    if(state.mode==="borne"){
+      var rH=Math.max(14,Math.max(state.imgW,state.imgH)/100);
+      var hitB=null,bestB=rH*rH;
+      state.bornes.forEach(function(b){var d=(b.x-imgX)*(b.x-imgX)+(b.y-imgY)*(b.y-imgY);if(d<bestB){bestB=d;hitB=b;}});
+      if(hitB)openBorneEditorFor(hitB);
+      else openBorneEditorNew(imgX,imgY,e.clientX,e.clientY);
+    }else{
+      var rH2=Math.max(12,Math.max(state.imgW,state.imgH)/120);
+      var hit=null,best=rH2*rH2;
+      state.points.forEach(function(p){var d=(p.x-imgX)*(p.x-imgX)+(p.y-imgY)*(p.y-imgY);if(d<best){best=d;hit=p;}});
+      if(hit)openEditorFor(hit);
+      else openEditorNew(imgX,imgY,e.clientX,e.clientY);
+    }
   });
 
-  // ---------- Export PNG ----------
+  function setMode(m){
+    state.mode=m;
+    $("modeMesure").classList.toggle("active",m==="mesure");
+    $("modeBorne").classList.toggle("active",m==="borne");
+    ptC.classList.toggle("mode-borne",m==="borne");
+    closeEditor();closeBorneEditor();
+  }
+  $("modeMesure").onclick=function(){setMode("mesure");};
+  $("modeBorne").onclick=function(){setMode("borne");};
+  $("btnAddBorne").onclick=function(){
+    setMode("borne");
+    status("Mode borne actif — clique sur le plan pour placer une borne.");
+  };
+
   function exportPNG(){
-    if(!state.img) return;
+    if(!state.img)return;
     var pad=Math.round(Math.max(state.imgW,state.imgH)/40)+10;
     var legendH=Math.round(state.imgH*0.06)+58;
-    var W=state.imgW, H=state.imgH+legendH;
-    var ex=document.createElement("canvas"); ex.width=W; ex.height=H;
+    var W=state.imgW,H=state.imgH+legendH;
+    var ex=document.createElement("canvas");ex.width=W;ex.height=H;
     var c=ex.getContext("2d");
-    c.fillStyle="#ffffff"; c.fillRect(0,0,W,H);
+    c.fillStyle="#ffffff";c.fillRect(0,0,W,H);
     c.drawImage(planC,0,0);
-    c.globalAlpha=state.opacity/100; c.drawImage(heatC,0,0); c.globalAlpha=1;
-    if(state.showPts) c.drawImage(ptC,0,0);
-    // footer band
-    c.fillStyle="#0E1116"; c.fillRect(0,state.imgH,W,legendH);
+    c.globalAlpha=state.opacity/100;c.drawImage(heatC,0,0);c.globalAlpha=1;
+    if(state.showPts)c.drawImage(ptC,0,0);
+    c.fillStyle="#0E1116";c.fillRect(0,state.imgH,W,legendH);
     var title=$("siteName").value.trim()||"Couverture DECT";
     var fs=Math.max(16,Math.round(W/55));
-    c.fillStyle="#E6EAF0"; c.font="600 "+fs+"px sans-serif"; c.textBaseline="top";
+    c.fillStyle="#E6EAF0";c.font="600 "+fs+"px sans-serif";c.textBaseline="top";
     c.fillText(title,pad,state.imgH+pad-2);
-    var sub=(state.metric==="rssi"?"RSSI (dBm)":"Frame quality (%)")+"  ·  "+state.points.length+" points  ·  "+new Date().toLocaleDateString("fr-FR");
-    c.fillStyle="#8A94A3"; c.font="400 "+Math.round(fs*0.62)+"px sans-serif";
+    var sub=(state.metric==="rssi"?"RSSI (dBm)":"Frame quality (%)")+
+      "  ·  "+state.points.length+" points  ·  "+state.bornes.length+" borne(s)"+
+      "  ·  "+new Date().toLocaleDateString("fr-FR");
+    c.fillStyle="#8A94A3";c.font="400 "+Math.round(fs*0.62)+"px sans-serif";
     c.fillText(sub,pad,state.imgH+pad+fs+2);
-    // legend gradient
-    var lw=Math.round(W*0.34), lh=Math.round(fs*0.9), lx=W-lw-pad, ly=state.imgH+pad+4;
+    var lw=Math.round(W*0.34),lh=Math.round(fs*0.9),lx=W-lw-pad,ly=state.imgH+pad+4;
     var grad=c.createLinearGradient(lx,0,lx+lw,0);
-    grad.addColorStop(0,"#EF4444");grad.addColorStop(.4,"#F97316");grad.addColorStop(.65,"#EAB308");grad.addColorStop(1,"#22C55E");
-    c.fillStyle=grad; c.fillRect(lx,ly,lw,lh);
-    c.fillStyle="#8A94A3"; c.font="400 "+Math.round(fs*0.55)+"px monospace";
+    grad.addColorStop(0,"#EF4444");grad.addColorStop(.4,"#F97316");
+    grad.addColorStop(.65,"#EAB308");grad.addColorStop(1,"#22C55E");
+    c.fillStyle=grad;c.fillRect(lx,ly,lw,lh);
+    c.fillStyle="#8A94A3";c.font="400 "+Math.round(fs*0.55)+"px monospace";
     var lo=state.metric==="rssi"?(state.badBound+" dBm"):"0%";
     var hi=state.metric==="rssi"?(state.goodBound+" dBm"):"100%";
-    c.textBaseline="top"; c.fillText(lo,lx,ly+lh+5);
-    c.textAlign="right"; c.fillText(hi,lx+lw,ly+lh+5); c.textAlign="left";
+    c.textBaseline="top";c.fillText(lo,lx,ly+lh+5);
+    c.textAlign="right";c.fillText(hi,lx+lw,ly+lh+5);c.textAlign="left";
     var name=(title.replace(/[^\w\-À-ÿ ]/g,"").trim()||"couverture-dect").replace(/\s+/g,"_");
-    download(ex.toDataURL("image/png"), name+".png");
+    dl(ex.toDataURL("image/png"),name+".png");
     status("PNG exporté.");
   }
 
-  // ---------- Save / Load JSON ----------
   function saveJSON(){
-    if(!state.img) return;
+    if(!state.img)return;
     var obj={
-      version:1, site:$("siteName").value, metric:state.metric,
-      opacity:state.opacity, radius:state.radius, smoothPow:state.smoothPow,
-      showPts:state.showPts, goodBound:state.goodBound, badBound:state.badBound,
-      nextId:state.nextId, points:state.points,
-      imgW:state.imgW, imgH:state.imgH, image:planC.toDataURL("image/png")
+      version:2,site:$("siteName").value,metric:state.metric,
+      opacity:state.opacity,radius:state.radius,smoothPow:state.smoothPow,
+      showPts:state.showPts,goodBound:state.goodBound,badBound:state.badBound,
+      nextId:state.nextId,borneNextId:state.borneNextId,
+      points:state.points,bornes:state.bornes,
+      imgW:state.imgW,imgH:state.imgH,image:planC.toDataURL("image/png")
     };
     var name=($("siteName").value.trim()||"releve-dect").replace(/[^\w\-À-ÿ]/g,"_");
-    download("data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(obj)), name+".json");
+    dl("data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(obj)),name+".json");
     status("Relevé enregistré.");
   }
   function loadJSON(text){
@@ -596,7 +752,12 @@
       state.showPts=o.showPts!==false;
       state.goodBound=o.goodBound!=null?o.goodBound:-60;
       state.badBound=o.badBound!=null?o.badBound:-90;
-      state.points=o.points||[]; state.nextId=o.nextId|| (state.points.length+1);
+      state.points=o.points||[];
+      state.bornes=o.bornes||[];
+      state.nextId=o.nextId||(state.points.length+1);
+      state.borneNextId=o.borneNextId||(state.bornes.length+1);
+      state.activeBorne=null;
+      state.points.forEach(function(p){if(p.borneId===undefined)p.borneId=null;});
       syncControls();
       var im=new Image();
       im.onload=function(){
@@ -604,26 +765,27 @@
         [planC,heatC,ptC].forEach(function(c){c.width=state.imgW;c.height=state.imgH;});
         planX.drawImage(im,0,0);
         empty.style.display="none";wrap.style.display="block";
+        $("modeBar").style.display="flex";
         $("btnExport").disabled=false;$("btnSave").disabled=false;
-        renderAll(); status("Relevé chargé : "+state.points.length+" point(s)");
+        renderAll();
+        status("Relevé chargé : "+state.points.length+" pt · "+state.bornes.length+" borne(s)");
       };
       im.src=o.image;
     }catch(err){status("Fichier illisible.");}
   }
 
-  function download(dataUrl,filename){
-    var a=document.createElement("a"); a.href=dataUrl; a.download=filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  function dl(dataUrl,filename){
+    var a=document.createElement("a");a.href=dataUrl;a.download=filename;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
   }
   function status(s){$("fStatus").textContent=s;}
 
-  // ---------- Controls wiring ----------
   function syncControls(){
-    $("opacity").value=state.opacity; $("vOpacity").textContent=state.opacity+"%";
-    $("radius").value=state.radius; $("vRadius").textContent=state.radius+" px";
-    $("smooth").value=Math.round(state.smoothPow*10); $("vSmooth").textContent=state.smoothPow.toFixed(1);
+    $("opacity").value=state.opacity;$("vOpacity").textContent=state.opacity+"%";
+    $("radius").value=state.radius;$("vRadius").textContent=state.radius+" px";
+    $("smooth").value=Math.round(state.smoothPow*10);$("vSmooth").textContent=state.smoothPow.toFixed(1);
     $("showPts").checked=state.showPts;
-    $("goodBound").value=state.goodBound; $("badBound").value=state.badBound;
+    $("goodBound").value=state.goodBound;$("badBound").value=state.badBound;
     document.querySelectorAll("#metricSeg button").forEach(function(b){b.classList.toggle("active",b.dataset.m===state.metric);});
     updateMetricUI();
   }
@@ -638,12 +800,26 @@
   $("radius").oninput=function(){state.radius=+this.value;$("vRadius").textContent=this.value+" px";renderHeat();};
   $("smooth").oninput=function(){state.smoothPow=this.value/10;$("vSmooth").textContent=state.smoothPow.toFixed(1);renderHeat();};
   $("showPts").onchange=function(){state.showPts=this.checked;renderPoints();};
-  $("goodBound").onchange=function(){state.goodBound=parseFloat(this.value)|| -60;updateMetricUI();renderAll();};
-  $("badBound").onchange=function(){state.badBound=parseFloat(this.value)|| -90;updateMetricUI();renderAll();};
+  $("goodBound").onchange=function(){state.goodBound=parseFloat(this.value)||-60;updateMetricUI();renderAll();};
+  $("badBound").onchange=function(){state.badBound=parseFloat(this.value)||-90;updateMetricUI();renderAll();};
   document.querySelectorAll("#metricSeg button").forEach(function(b){
-    b.onclick=function(){state.metric=b.dataset.m;
+    b.onclick=function(){
+      state.metric=b.dataset.m;
       document.querySelectorAll("#metricSeg button").forEach(function(x){x.classList.remove("active");});
-      b.classList.add("active"); updateMetricUI(); renderAll();};
+      b.classList.add("active");updateMetricUI();renderAll();
+    };
+  });
+  $("borneFilter").onchange=function(){
+    state.activeBorne=parseInt(this.value)||null;renderAll();
+  };
+
+  document.querySelectorAll(".tab-btn").forEach(function(btn){
+    btn.onclick=function(){
+      document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});
+      document.querySelectorAll(".tab-pane").forEach(function(p){p.classList.remove("active");});
+      btn.classList.add("active");
+      $("tab-"+btn.dataset.tab).classList.add("active");
+    };
   });
 
   $("btnPlan").onclick=$("btnPlan2").onclick=function(){$("filePlan").click();};
@@ -655,7 +831,16 @@
 
   $("edOk").onclick=commitEditor;
   $("edDelete").onclick=deletePoint;
-  editor.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();commitEditor();}if(e.key==="Escape"){closeEditor();}});
+  editor.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){e.preventDefault();commitEditor();}
+    if(e.key==="Escape")closeEditor();
+  });
+  $("beOk").onclick=commitBorneEditor;
+  $("beDelete").onclick=deleteBorne;
+  borneEd.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){e.preventDefault();commitBorneEditor();}
+    if(e.key==="Escape")closeBorneEditor();
+  });
 
   syncControls();
 })();
