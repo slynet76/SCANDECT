@@ -58,15 +58,13 @@
   .empty .big{font-size:42px;margin-bottom:6px;color:var(--muted-2);}
   .empty h2{color:var(--txt);font-weight:600;font-size:18px;margin:0 0 8px;}
   .empty p{line-height:1.6;margin:0 0 18px;}
-  /* Barres flottantes */
-  .mode-bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:30;
-    display:none;background:var(--panel);border:1px solid var(--line);
-    border-radius:9px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.6);}
-  .mode-btn{padding:9px 16px;border:none;background:transparent;color:var(--muted);
+  /* Segment mode dans le header */
+  .mode-seg{display:none;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:0 0 auto;}
+  .mseg-btn{padding:7px 13px;border:none;background:var(--panel-2);color:var(--muted);
     font-family:var(--sans);font-size:13px;cursor:pointer;transition:.12s;white-space:nowrap;}
-  .mode-btn.active{background:var(--accent);color:#06222e;font-weight:600;}
-  .mode-btn.active.calib{background:#FBBF24;color:#1a0f00;}
-  .mode-btn:not(.active):hover{color:var(--txt);}
+  .mseg-btn.active{background:var(--accent);color:#06222e;font-weight:600;}
+  .mseg-btn.active.calib{background:#FBBF24;color:#1a0f00;}
+  .mseg-btn:not(.active):hover{color:var(--txt);}
   .session-bar{position:absolute;top:56px;left:50%;transform:translateX(-50%);z-index:29;
     display:none;align-items:center;gap:10px;background:var(--panel);border:2px solid var(--accent);
     border-radius:9px;padding:7px 16px;box-shadow:0 6px 20px rgba(0,0,0,.7);white-space:nowrap;}
@@ -157,6 +155,11 @@
     <h1>DECT Coverage Mapper <span>· survey RSSI</span></h1>
   </div>
   <input id="siteName" class="site-name" placeholder="Nom du site / étage…" autocomplete="off">
+  <div class="mode-seg" id="modeSeg">
+    <button class="mseg-btn active" id="modeMesure">📍 Mesure</button>
+    <button class="mseg-btn" id="modeBorne">📡 Borne</button>
+    <button class="mseg-btn" id="modeCalib">📏 Calibrer</button>
+  </div>
   <div class="header-actions">
     <button class="btn" id="btnPlan">Charger un plan</button>
     <button class="btn ghost" id="btnLoad">Ouvrir relevé</button>
@@ -169,11 +172,6 @@
 
 <div class="main">
 <div class="stage" id="stage">
-  <div class="mode-bar" id="modeBar">
-    <button class="mode-btn active" id="modeMesure">📍 Mesure</button>
-    <button class="mode-btn" id="modeBorne">📡 Borne</button>
-    <button class="mode-btn" id="modeCalib">📏 Calibrer</button>
-  </div>
   <div class="session-bar" id="sessionBar">
     <span class="s-label">Analyse en cours</span>
     <span class="s-name" id="sessionName"></span>
@@ -190,7 +188,7 @@
     <h4 id="edTitle">Nouveau point</h4>
     <div class="prow">
       <div class="field"><span>RSSI (dBm)</span>
-        <input id="edRssi" type="number" step="1" placeholder="-65" inputmode="numeric"></div>
+        <input id="edRssi" type="text" inputmode="numeric" placeholder="-65"></div>
       <div class="field"><span>Qualité (%)</span>
         <input id="edQual" type="number" step="1" min="0" max="100" placeholder="100" inputmode="numeric"></div>
     </div>
@@ -462,7 +460,7 @@
       [planC,heatC,ptC].forEach(function(c){c.width=state.imgW;c.height=state.imgH;});
       planX.drawImage(im,0,0);
       $("empty").style.display="none";wrap.style.display="block";
-      $("modeBar").style.display="flex";$("zoomCtrls").style.display="flex";
+      $("modeSeg").style.display="flex";$("zoomCtrls").style.display="flex";
       $("btnExport").disabled=false;$("btnSave").disabled=false;
       fitView();renderAll();status("Plan chargé · "+state.imgW+"×"+state.imgH+" px");
     };
@@ -739,12 +737,12 @@
   // ---- Éditeur mesure ----
   function openEditorNew(clientX,clientY,imgX,imgY){
     editing.id=null;editing.pending={x:imgX,y:imgY};
-    $("edRssi").value="";$("edQual").value="";$("edLabel").value="";
+    $("edRssi").value="-";$("edQual").value="";$("edLabel").value="";
     $("edBorne").classList.remove("required-err");
     updateEdBorneSelect(state.activeSession||state.activeBorne||null);
     $("edDelete").style.display="none";$("edTitle").textContent="Nouveau point";
     showPopupAt(editor,clientX,clientY,295);
-    setTimeout(function(){$("edRssi").focus();},10);
+    setTimeout(function(){$("edRssi").focus();$("edRssi").setSelectionRange(1,1);},10);
   }
   function openEditorFor(p){
     editing.id=p.id;editing.pending=null;
@@ -827,10 +825,15 @@
     if(isNaN(d)||d<=0){$("calibDist").focus();return;}
     var pxD=Math.hypot(state.calPts[1].x-state.calPts[0].x,state.calPts[1].y-state.calPts[0].y);
     state.pixPerMeter=pxD/d;
+    // Rayon par défaut à 2 m
+    state.radius=Math.round(2*state.pixPerMeter);
+    $("radius").value=Math.min(500,Math.max(20,state.radius));
+    // Effacer les marqueurs de calibration
+    state.calPts=[];
     closeCalibEditor();setMode("mesure");
     updateCalibDisplay();renderPoints();
     $("vRadius").textContent=formatRadius();
-    status("Calibré : 1 m = "+Math.round(state.pixPerMeter)+" px");
+    status("Calibré : 1 m = "+Math.round(state.pixPerMeter)+" px · rayon 2 m");
   }
   function clearCalib(){state.pixPerMeter=null;state.calPts=[];updateCalibDisplay();renderPoints();$("vRadius").textContent=formatRadius();}
   function updateCalibDisplay(){
@@ -897,12 +900,12 @@
   // ---- Mode ----
   function setMode(m){
     state.mode=m;
-    $("modeMesure").classList.toggle("active",m==="mesure");
-    $("modeMesure").classList.remove("calib");
-    $("modeBorne").classList.toggle("active",m==="borne");
-    $("modeBorne").classList.remove("calib");
-    $("modeCalib").classList.toggle("active",m==="calibrate");
-    $("modeCalib").classList.toggle("calib",m==="calibrate");
+    ["modeMesure","modeBorne","modeCalib"].forEach(function(id){
+      $( id).classList.remove("active","calib");
+    });
+    if(m==="mesure")$("modeMesure").classList.add("active");
+    else if(m==="borne")$("modeBorne").classList.add("active");
+    else if(m==="calibrate"){$("modeCalib").classList.add("active","calib");}
     ptC.className=m==="borne"?"mode-borne":m==="calibrate"?"mode-calibrate":"";
     closeEditor();closeBorneEditor();
     if(m!=="calibrate"&&state.calPts.length===1)state.calPts=[];
@@ -976,7 +979,7 @@
         [planC,heatC,ptC].forEach(function(c){c.width=state.imgW;c.height=state.imgH;});
         planX.drawImage(im,0,0);
         $("empty").style.display="none";wrap.style.display="block";
-        $("modeBar").style.display="flex";$("zoomCtrls").style.display="flex";
+        $("modeSeg").style.display="flex";$("zoomCtrls").style.display="flex";
         $("btnExport").disabled=false;$("btnSave").disabled=false;
         fitView();renderAll();markClean();
         status("Relevé chargé : "+state.points.length+" pt · "+state.bornes.length+" borne(s)");
